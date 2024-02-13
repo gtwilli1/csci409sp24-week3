@@ -6,6 +6,16 @@ from django.test import TestCase
 from core import models
 from datetime import datetime
 
+def create_airport():
+    return models.Airport.objects.create(
+        name="Myrtle Beach International",
+        airport_code="MYR",
+        address="1100 Jetport Rd",
+        city="Myrtle Beach",
+        state="SC",
+        zip_code="29577"
+    )
+
 class ModelTests(TestCase):
 
     def test_create_airport(self):
