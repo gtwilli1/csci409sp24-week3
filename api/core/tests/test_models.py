@@ -20,50 +20,43 @@ class ModelTests(TestCase):
         )
         self.assertEqual(str(airport), airport.name)
 
-class Airline(models.Model):
-    name = models.CharField(max_length=255)
-    airline_code = models.CharField(max_length=5)
+    def test_create_airline(self):
+        """Test Creating an Airline is Successful."""
+        airline = models.Airline.objects.create(
+            name="Delta Airlines",
+            airline_code="DL"
+        )
 
-    def __str__(self):
-        return self.name
-    
-class Runway(models.Model):
-    RUNWAY_DESIGNATIONS = [
-        ('L', 'Left'),
-        ('C', 'Center'),
-        ('R', 'Right'),
-        ('N', 'None'),
-    ]
+        self.assertEqual(str(airline), airline.name)
 
-    runway_number = models.IntegerField()
-    runway_designation = models.CharField(max_length=1, choices=RUNWAY_DESIGNATIONS)
-    length = models.IntegerField()
-    width = models.IntegerField()
-    airport = models.ForeignKey('Airport', on_delete=models.CASCADE, related_name='runways')
+    def test_create_runway(self):
+        """Test Creating a Runway is Successful."""
+        runway = models.Runway.objects.create(
+            airport = create_airport(),
+            runway_number = 18,
+            runway_designation = "N",
+            length=5000,
+            width=5000
+        )
 
-    def __str__(self):
-        return f"{self.runway_number}{self.runway_designation}"
-    
+        self.assertEqual(str(runway), str(runway.runway_number)+runway.runway_designation)
 
-class Flight(models.Model):
-    origin = models.ForeignKey(
-        'Airport',
-        on_delete=models.PROTECT,
-        related_name='flight_origin'
-    )
-    destination = models.ForeignKey(
-        'Airport',
-        on_delete=models.PROTECT,
-        related_name='flight_destination'
-    )
-    airline = models.ForeignKey(
-        'Airline',
-        on_delete=models.PROTECT
-    )
-    flight_number = models.IntegerField()
-    departure = models.DateTimeField()
-    arrival = models.DateTimeField()
-    aircraft_type = models.CharField(max_length=10)
 
-    def __str__(self):
-        return f"{self.airline.airline_code}{self.flight_number}"
+    def test_create_flight(self):
+        """Test Creating a Flight is Successful."""
+        airline = models.Airline.objects.create(
+            name='Delta Airlines',
+            airline_code='DL'
+        )
+
+        flight = models.Flight.objects.create(
+            origin = create_airport(),
+            destination = create_airport(),
+            airline = airline,
+            flight_number = 1954,
+            departure = datetime.now(),
+            arrival = datetime.now(),
+            aircraft_type = 'B747',
+        )
+
+        self.assertEqual(str(flight), flight.airline.airline_code + str(flight.flight_number))
