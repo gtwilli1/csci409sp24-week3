@@ -13,3 +13,8 @@ class RunwaySerializer(serializers.ModelSerializer):
         fields = ['airport', 'runway_number', 'runway_designation', 'length', 'width']
         read_only_fields = ['id']        
 
+class FlightSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Flight
+        fields = ['origin', 'destination', 'airline', 'departure', 'arrival', 'flight_number', 'aircraft_type']
+        read_only_fields = ['id']
