@@ -17,7 +17,7 @@ function FlightsPage() {
       <p>Update this to create a table showing the flight number, destination, origin, and departure time</p>
       <p>The flight number should contain a link navigating to flights/id where id is the id of the flight I.E. 1</p>
     </div>
-  );
+  ); 
 }
 
 export default FlightsPage;
